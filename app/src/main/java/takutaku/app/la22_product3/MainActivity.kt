@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         val words: List<Word> = wordDao.getAll()
 
         if(words != null) {
-            binding.titleTextView.text = words[0].title
-            binding.contentTextView.text = words[0].content
+            binding.titleTextView.text = words.last().title
+            binding.contentTextView.text = words.last().content
         }
 
         binding.fab.setOnClickListener {
