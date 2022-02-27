@@ -13,15 +13,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
+//        roomのインスタンス生成
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "database-name"
         ).allowMainThreadQueries().build()
 
+//        Daoのインスタンス生成
         val wordDao = db.wordDao()
+//        roomのデータを全て取得
         val words: List<Word> = wordDao.getAll()
-
-        val wordAdapter = WordAdapter()
+//        OnClickListenerを引数としてWordAdapterのインスタンス生成
+        val wordAdapter = WordAdapter(
+            OnClickListener { word ->
+                val toPlusIntent = Intent(this,PlusActivity::class.java)
+                toPlusIntent.putExtra("TITLE",word.title)
+                toPlusIntent.putExtra("MEMO",word.content)
+                toPlusIntent.putExtra("ID",word.id)
+                startActivity(toPlusIntent)
+            }
+        )
         wordAdapter.submitList(words)
         binding.recyclerView.adapter = wordAdapter
         binding.recyclerView.layoutManager =
