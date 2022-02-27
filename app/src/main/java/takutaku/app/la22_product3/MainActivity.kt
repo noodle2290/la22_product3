@@ -26,11 +26,9 @@ class MainActivity : AppCompatActivity() {
 //        OnClickListenerを引数としてWordAdapterのインスタンス生成
         val wordAdapter = WordAdapter(
             OnClickListener { word ->
-                val toPlusIntent = Intent(this,PlusActivity::class.java)
-                toPlusIntent.putExtra("TITLE",word.title)
-                toPlusIntent.putExtra("MEMO",word.content)
-                toPlusIntent.putExtra("ID",word.id)
-                startActivity(toPlusIntent)
+                val toDetailIntent = Intent(this,DetailActivity::class.java)
+                toDetailIntent.putExtra("ID",word.id)
+                startActivity(toDetailIntent)
             }
         )
         wordAdapter.submitList(words)

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.La22_product3">
         <activity
+            android:name=".DetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlusActivity"
             android:exported="false" />
         <activity
