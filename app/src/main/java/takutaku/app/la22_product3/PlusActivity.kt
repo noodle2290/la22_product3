@@ -20,14 +20,13 @@ class PlusActivity : AppCompatActivity() {
             AppDatabase::class.java, "database-name"
         ).allowMainThreadQueries().build()
 
-        val titleName:String? = intent.getStringExtra("TITLE")
-        val contentName:String? = intent.getStringExtra("MEMO")
         val id:Int = intent.getIntExtra("ID",0)
         val wordDao = db.wordDao()
-        val toMainActivityIntent = Intent(this, MainActivity::class.java)
+        val word = wordDao.getWord(id)
+        val toMainIntent = Intent(this, MainActivity::class.java)
+        val toDetailIntent = Intent(this, DetailActivity::class.java)
 
-        if(titleName == null) {
-            binding.deleteButton.isInvisible = true
+        if(id == 0) {
             binding.saveButton.setOnClickListener {
                 val word = Word(
                     0,
@@ -35,12 +34,12 @@ class PlusActivity : AppCompatActivity() {
                     binding.contentEditText.text.toString()
                 )
                 wordDao.insert(word)
-                startActivity(toMainActivityIntent)
+                startActivity(toMainIntent)
             }
         }else{
             binding.deleteButton.isVisible = true
-            binding.titleEditText.setText(titleName)
-            binding.contentEditText.setText(contentName)
+            binding.titleEditText.setText(word.title)
+            binding.contentEditText.setText(word.content)
             binding.saveButton.setOnClickListener {
                 val word = Word(
                     id,
@@ -48,17 +47,8 @@ class PlusActivity : AppCompatActivity() {
                     binding.contentEditText.text.toString()
                 )
                 wordDao.update(word)
-                startActivity(toMainActivityIntent)
-            }
-            binding.deleteButton.setOnClickListener {
-                val word = Word(
-                    id,
-                    titleName,
-                    contentName
-                )
-                wordDao.delete(word)
-
-                startActivity(toMainActivityIntent)
+                toDetailIntent.putExtra("ID",word.id)
+                startActivity(toDetailIntent)
             }
         }
     }
