@@ -37,7 +37,6 @@ class PlusActivity : AppCompatActivity() {
                 startActivity(toMainIntent)
             }
         }else{
-            binding.deleteButton.isVisible = true
             binding.titleEditText.setText(word.title)
             binding.contentEditText.setText(word.content)
             binding.saveButton.setOnClickListener {

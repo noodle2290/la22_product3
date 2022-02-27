@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.room.Room
 import takutaku.app.la22_product3.databinding.ActivityDetailBinding
 
@@ -60,6 +61,7 @@ class DetailActivity : AppCompatActivity() {
             }
             R.id.delete -> {
                 wordDao.delete(word)
+                Toast.makeText(applicationContext, "削除しました", Toast.LENGTH_SHORT).show()
                 startActivity(toMainIntent)
                 true
             }
