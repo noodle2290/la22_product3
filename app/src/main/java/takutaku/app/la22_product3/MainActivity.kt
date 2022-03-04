@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 //        OnClickListenerを引数としてWordAdapterのインスタンス生成
         val wordAdapter = WordAdapter(
             OnClickListener { word ->
-                Intent(this, DetailActivity(),word.id)
+                Intent(DetailActivity(),word.id)
             }
         )
         wordAdapter.submitList(words)
@@ -32,15 +32,15 @@ class MainActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.fab.setOnClickListener {
-            Intent(this, PlusActivity())
+            Intent(PlusActivity())
         }
     }
 
-    fun Intent(context: Context, activity: Activity,vararg ids:Int){
-        val ActivityIntent = Intent(context,activity::class.java)
+    fun Intent(activity: Activity,vararg ids:Int){
+        val activityIntent = Intent(applicationContext,activity::class.java)
         for(i in ids) {
-            ActivityIntent.putExtra("ID", i)
+            activityIntent.putExtra(Constants.SELECTED_MEMO_ID, i)
         }
-        startActivity(ActivityIntent)
+        startActivity(activityIntent)
     }
 }

@@ -13,22 +13,19 @@ import takutaku.app.la22_product3.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var wordDao:WordDao
+
+    private val wordDao = WordApplication.db.wordDao()
+
     private lateinit var word:Word
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater).apply { setContentView(this.root) }
 
-//        roomのインスタンス生成
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).allowMainThreadQueries().build()
-        //        Daoのインスタンス生成
-        wordDao = db.wordDao()
-        val id:Int = intent.getIntExtra("ID",0)
+        val id:Int = intent.getIntExtra(Constants.SELECTED_MEMO_ID,0)
+
         word = wordDao.getWord(id)
+
         binding.toolbarTitle.text = word.title
         binding.contentDetailTextView.text = word.content
 
@@ -41,7 +38,7 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
 
         binding.editIntentButton.setOnClickListener {
-            Intent(this,PlusActivity(),word.id)
+            Intent(PlusActivity(),word.id)
         }
     }
 
@@ -54,23 +51,23 @@ class DetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                Intent(this,MainActivity())
+                Intent(MainActivity())
                 true
             }
             R.id.delete -> {
+                Toast.makeText(applicationContext, word.title + Constants.DELETE_MEMO_DIALOG, Toast.LENGTH_SHORT).show()
                 wordDao.delete(word)
-                Toast.makeText(applicationContext, "削除しました", Toast.LENGTH_SHORT).show()
-                Intent(this,MainActivity())
+                Intent(MainActivity())
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun Intent(context: Context, activity: Activity, vararg ids:Int){
+    fun Intent(activity: Activity, vararg ids:Int){
         val ActivityIntent = Intent(applicationContext,activity::class.java)
         for(i in ids) {
-            ActivityIntent.putExtra("ID", i)
+            ActivityIntent.putExtra(Constants.SELECTED_MEMO_ID, i)
         }
         startActivity(ActivityIntent)
     }
